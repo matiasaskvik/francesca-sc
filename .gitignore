@@ -1,0 +1,5 @@
+# reaper files
+*.reapeaks
+
+# mac
+.DS_Store
