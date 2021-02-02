@@ -1,5 +1,7 @@
 # francesca-sc
-Supercollider tools to make the music for francesca
+Supercollider tools to make music for Francesca Woodman
+
+![francesca woodman](francesca_woodman.jpg)
 
 ## Requirements
 
