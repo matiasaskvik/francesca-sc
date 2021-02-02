@@ -1,4 +1,6 @@
-//// PZ Beat machine 2020 v0.1
+//// PZ Beat machine 2021 v0.2
+
+/// changelog: PZ_layer now supports 4 args
 
 /*
 Class for custom functional beat machine
@@ -35,30 +37,34 @@ PZ_machine {
 
 PZ_layer {
 	 classvar <>maxsubdiv=12, <>debug=false;
-	 var <>item=nil, <>itemarg=nil, <>debug=false;
+	 var <>item=nil, <>itemargs=nil, <>debug=false;
 
-	*new {arg item=this.item, itemarg=nil;
+	*new {arg ... args;
 
-		 ^super.new.init(item, itemarg);
+		 ^super.new.init(args[0], args);
 	}
 
-	init {|item, itemarg|
-		this.item = item;
-		this.itemarg = itemarg;
+	init {arg ... args;
+		this.item = args[0];
+		this.itemargs = args;
 	}
 
 	rhythm {arg ... args;
 		var beats=args;
 		// beats.postln;
 		 ^Routine{
-			if (debug) {item.postln; beats.asString.postln;};
-
+			if (debug) {
+				item.postln; beats.asString.postln;
+				"******".postln;
+				itemargs.postln;
+				"******".postln;
+			};
 			beats.do{arg beat, index;
 				if (beat.isArray.not) { // single:
 					if (beat > 0) {
 						if (debug) {(index.asString ++ " = " ++ beat.asString).postln;};
 						(beat.reciprocal.clip(1, maxsubdiv)).do{
-							item.(itemarg);
+							item.(itemargs[1][1], itemargs[1][2], itemargs[1][3], itemargs[1][4]);
 							(beat.clip(maxsubdiv.reciprocal, 1)).wait;
 						};
 					} {1.wait};
@@ -68,7 +74,7 @@ PZ_layer {
 							if (sub > 0) {
 								if (debug) {(beat.asString ++ " = " ++ beat.asString ++ sub.asString).postln;};
 								((sub).clip(1, maxsubdiv)).do{
-									item.(itemarg);
+									item.(itemargs[1][1], itemargs[1][2], itemargs[1][3], itemargs[1][4]);
 									if (sub == 1) {
 										(sub/beat.size).wait;
 									} {(beat.size.reciprocal/sub).wait;}

@@ -58,9 +58,13 @@ s.sync;
 
 // synth functions
 s.sync;
-		~example = {arg chord, amp=0.1, at=0.2, rl=0.1, out=6; {SinOsc.ar(chord).sum*amp*EnvGen.kr(Env.perc(at, rl), doneAction:2); }.play(s, out) };
+~bass = {|buf, chan=0| {PlayBuf.ar(1, buf, 1, doneAction: 2)}.play(s, chan) };
 
-		~sampler = { arg buf, loop, out=0, at=0.01, sust=0, rl=0.1, gate=1, rate=1, pos=0, amp=1, gap=0, trig=1, chans;
+~bass_random = { {PlayBuf.ar(1, ~buffers['db'][(1..8).choose], 1, doneAction: 2)}.play(s, (0..7).choose) };
+
+~alarmclock = {|buf, out=0| {PlayBuf.ar(2, ~buffers['radio1'], 1, BufFrames.kr(~buffers['radio1'])*LFNoise1.kr(1).range(0, 1), doneAction: 2)*EnvGen.kr(Env.perc(0.1, 3))*8}.play(s, (0..7).choose) };
+
+~sampler = { arg buf, loop, out=0, at=0.01, sust=0, rl=0.1, gate=1, rate=1, pos=0, amp=1, gap=0, trig=1, chans;
 			var env;
 			if (buf.numChannels == 2) {
 				{arg gap=gap, at=at, rl=rl, sust=sust; PlayBuf.ar(2, buf, BufRateScale.kr(buf)*rate, trig, BufFrames.kr(buf)*pos, loop)*EnvGen.kr(Env.linen(at, sust, rl).circle(gap), gate, doneAction:2)}.play(s, out);
@@ -85,7 +89,6 @@ s.sync;
 	s.sync;
 
 // globals
-	~bossaamp = 1;
 	s.sync;
 	a = PZ_machine(s);
 	b = PZ_machine(s);
