@@ -4,12 +4,22 @@ s.waitForBoot{
 		~path_samples = thisProcess.nowExecutingPath.dirname ++ "/samples/";
 		~buffers = ();
 		~buffers['db'] = ();
-		~buffers['radio1'] = Buffer.read(s, ~path_samples ++ "radio1.wav");
-		~buffers['radio2'] = Buffer.read(s, ~path_samples ++ "radio2.wav");
+		~buffers['radio'] = ();
+		~buffers['sax'] = ();
+		2.do{|i|
+			var index=i+1;
+			~buffers['radio'][index] = Buffer.read(s, ~path_samples ++ "radio" ++index++".wav");
+		};
 		8.do{|i|
 			var index=i+1;
 			~buffers['db'][index] = Buffer.read(s, ~path_samples ++ "db"++index++".wav");
 		};
+		9.do{|i|
+			var index=i+1;
+			~buffers['sax'][index] = Buffer.read(s, ~path_samples ++ "sax"++index++".wav");
+		};
+		~buffers['voice_msg_start'] = Buffer.read(s, ~path_samples ++ "voice_message_start.wav");
+		~buffers['voice_msg_end'] = Buffer.read(s, ~path_samples ++ "voice_message_end.wav");
 );
 
 // chord progressions:
@@ -62,7 +72,9 @@ s.sync;
 
 ~bass_random = { {PlayBuf.ar(1, ~buffers['db'][(1..8).choose], 1, doneAction: 2)}.play(s, (0..7).choose) };
 
-~alarmclock = {|buf, out=0| {PlayBuf.ar(2, ~buffers['radio1'], 1, BufFrames.kr(~buffers['radio1'])*LFNoise1.kr(1).range(0, 1), doneAction: 2)*EnvGen.kr(Env.perc(0.1, 3))*8}.play(s, (0..7).choose) };
+		~alarmclock = {|buf, out=0, at=0.01, rl=3, amp=1, rate=2| {(PlayBuf.ar(2, buf, rate,1, BufFrames.kr(buf)*LFNoise0.kr(6).range(0, 1), doneAction: 2)*EnvGen.kr(Env.perc(at, rl))).sum*amp}.play(s, out) };
+
+				~samplerMono = {|buf, out=0, at=0.01, rl=3, amp=1, rate=2| {(PlayBuf.ar(1, buf, rate,1, 0, doneAction: 2)*EnvGen.kr(Env.perc(at, rl)))*amp}.play(s, out) };
 
 ~sampler = { arg buf, loop, out=0, at=0.01, sust=0, rl=0.1, gate=1, rate=1, pos=0, amp=1, gap=0, trig=1, chans;
 			var env;
@@ -72,6 +84,16 @@ s.sync;
 				{arg gap=gap, at=at, rl=rl, sust=sust; PlayBuf.ar(1, buf, BufRateScale.kr(buf)*rate, trig, BufFrames.kr(buf)*pos, loop)*EnvGen.kr(Env.linen(at, sust, rl).circle(gap), gate, doneAction:2)}.play(s, out);
 			};
 };
+
+	~voicemsg = {|buf, out=0, amp=1|
+			{
+				~samplerMono.(~buffers['voice_msg_start'], out, 0.01, 4, amp);
+				(~buffers['voice_msg_start'].duration - 0.3).wait;
+				~bass.(buf, out);
+				buf.duration.wait;
+				~samplerMono.(~buffers['voice_msg_end'], out, 0.01, 4, amp);
+			}.fork;
+		};
 
 );
 

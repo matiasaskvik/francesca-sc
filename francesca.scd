@@ -45,7 +45,32 @@ y.release //stop
 /// MINIMAL BEATS
 //////////////////////////////////
 
+/////// minimal beat:
+t.tempo=0.2
+// arguments are: buffer, out channel, attack, releasel, amp, rate
+~funcs['a'][0] = {PZ_layer(~alarmclock, ~buffers['radio'][1], 0.rrand(8), 0.1.rrand(0.3), 0.01, 0.5, 1.rrand(3)).rhythm(0.rrand(2),0,0,0)};
 
+~funcs['a'][1] = {PZ_layer(~alarmclock, ~buffers['radio'][1], 0.rrand(8), 0.01, 0.1.rrand(0.3), 0.5, 1.rrand(3)).rhythm(0.rrand(1), [0.rrand(2)], 0, [0,0,0.rrand(2)])};
+
+~funcs['a'][2] = {PZ_layer(~alarmclock, ~buffers['radio'][1], 0.rrand(8), 0.01, 0.1.rrand(0.6), 0.8, 1.rrand(3)).rhythm(0, 0, 0, [0,4.rrand(2)])};
+
+~funcs['a'][3] = {PZ_layer(~alarmclock, ~buffers['radio'][1], 0.rrand(8), 0.1.rrand(0.3), 0.01, 0.5, 1.rrand(3)).rhythm(0, 0, 1, [0.rrand(4),0,0,0])};
+
+~funcs['a'][4] = {PZ_layer(~alarmclock, ~buffers['radio'][2], 0.rrand(8), 0.1.rrand(0.3), 0.01, 0.3, 1.rrand(4)).rhythm(0, 0, [0,1], 1)};
+
+~notes = Pseq([~buffers['db'][5], ~buffers['db'][8], ~buffers['db'][5]].stutter(1), 2);
+~notes2 = Pseq([~buffers['db'][2], ~buffers['db'][7], ~buffers['db'][1]].stutter(1), 2);
+~phrase = Pseq([~notes++~notes2], inf).asStream;
+~funcs['b'][0] = {PZ_layer(~samplerMono, ~phrase.next, 9, 0.8, 0.3, 0.2, 1).rhythm(1)};
+b.beats = 1;
+
+// v2 (faster)
+t.tempo=1;
+b.beats = 1/3;
+
+~funcs['a'].do{|f, i| ~funcs['a'][i] = ();} // stop all a
+~funcs['b'].do{|f, i| ~funcs['b'][i] = ();} // stop all b
+~funcs['c'].do{|f, i| ~funcs['c'][i] = ();} // stop all c
 
 //////////////////////////////////
 //////// NOISE
@@ -80,3 +105,17 @@ Ndef(\s4, {BPF.ar(WhiteNoise.ar(1), LFNoise1.kr(2).range(3100, 1856), 0.2)}).pla
 Ndef(\s5, {BPF.ar(WhiteNoise.ar(1), LFNoise1.kr(1/8).range(200, 856), 0.5)}).play(1,1);
 Ndef(\s6, {BPF.ar(WhiteNoise.ar(1), LFNoise1.kr(1/6).range(200, 1856), 0.8)}).play(0,1);
 Ndef.all.do{|n| n.stop(8);};
+
+
+//////////////////////////////////
+//////// VOICE MESSAGES
+//////////////////////////////////
+//examples:
+~voicemsg.(~buffers['db'][2], 0, 1); // arguments are: audio buffer, channel, amplitude
+~voicemsg.(~buffers['sax'][2], 0, 1);
+
+// example with other wav (your path will be diffrent!):
+~mybuffer = Buffer.read(s, "/Users/narcodeb/Downloads/scene4_pappa.wav");
+~voicemsg.(~mybuffer, 1, 1);
+
+

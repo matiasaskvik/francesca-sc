@@ -1,6 +1,6 @@
 //// PZ Beat machine 2021 v0.2
 
-/// changelog: PZ_layer now supports 4 args
+/// changelog: PZ_layer now supports 6 args
 
 /*
 Class for custom functional beat machine
@@ -64,7 +64,7 @@ PZ_layer {
 					if (beat > 0) {
 						if (debug) {(index.asString ++ " = " ++ beat.asString).postln;};
 						(beat.reciprocal.clip(1, maxsubdiv)).do{
-							item.(itemargs[1][1], itemargs[1][2], itemargs[1][3], itemargs[1][4]);
+							item.(itemargs[1][1], itemargs[1][2], itemargs[1][3], itemargs[1][4], itemargs[1][5], itemargs[1][6]);
 							(beat.clip(maxsubdiv.reciprocal, 1)).wait;
 						};
 					} {1.wait};
@@ -74,7 +74,7 @@ PZ_layer {
 							if (sub > 0) {
 								if (debug) {(beat.asString ++ " = " ++ beat.asString ++ sub.asString).postln;};
 								((sub).clip(1, maxsubdiv)).do{
-									item.(itemargs[1][1], itemargs[1][2], itemargs[1][3], itemargs[1][4]);
+									item.(itemargs[1][1], itemargs[1][2], itemargs[1][3], itemargs[1][4],itemargs[1][5], itemargs[1][6]);
 									if (sub == 1) {
 										(sub/beat.size).wait;
 									} {(beat.size.reciprocal/sub).wait;}
