@@ -10,7 +10,6 @@
 //////////////////////////////////
 
 // minimal version:
-PZ_layer.debug_(true);
 ~funcs['a'][0] = {PZ_layer(~bass_random).rhythm([2])};
 
 // more rhythm (1 sample played each beat):
@@ -41,6 +40,12 @@ x.release(1); //stop
 y = ~sampler.(~buffers['radio1'], loop:1, gap:0, sust:0);
 y.set(\gap, 0.2, \at, 0, \rl, 0.2, \sust, 0, \amp, 4);
 y.release //stop
+
+//////////////////////////////////
+/// MINIMAL BEATS
+//////////////////////////////////
+
+
 
 //////////////////////////////////
 //////// NOISE
