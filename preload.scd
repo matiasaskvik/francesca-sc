@@ -6,6 +6,9 @@ s.waitForBoot{
 		~buffers['db'] = ();
 		~buffers['radio'] = ();
 		~buffers['sax'] = ();
+		~buffers['dbp'] = ();
+		~buffers['dbs'] = ();
+
 		2.do{|i|
 			var index=i+1;
 			~buffers['radio'][index] = Buffer.read(s, ~path_samples ++ "radio" ++index++".wav");
@@ -17,6 +20,14 @@ s.waitForBoot{
 		9.do{|i|
 			var index=i+1;
 			~buffers['sax'][index] = Buffer.read(s, ~path_samples ++ "sax"++index++".wav");
+		};
+		7.do{|i|
+			var index=i+1;
+			~buffers['dbp'][index] = Buffer.read(s, ~path_samples ++ "dbp"++index++".wav");
+		};
+		9.do{|i|
+			var index=i+1;
+			~buffers['dbs'][index] = Buffer.read(s, ~path_samples ++ "dbs"++index++".wav");
 		};
 		~buffers['voice_msg_start'] = Buffer.read(s, ~path_samples ++ "voice_message_start.wav");
 		~buffers['voice_msg_end'] = Buffer.read(s, ~path_samples ++ "voice_message_end.wav");
@@ -70,7 +81,7 @@ s.sync;
 s.sync;
 ~bass = {|buf, chan=0| {PlayBuf.ar(1, buf, 1, doneAction: 2)}.play(s, chan) };
 
-~bass_random = { {PlayBuf.ar(1, ~buffers['db'][(1..8).choose], 1, doneAction: 2)}.play(s, (0..7).choose) };
+~bass_random = { {PlayBuf.ar(1, ~buffers['dbs'][(1..9).choose], 1, doneAction: 2)}.play(s, (0..9).choose) };
 
 		~alarmclock = {|buf, out=0, at=0.01, rl=3, amp=1, rate=2| {(PlayBuf.ar(2, buf, rate,1, BufFrames.kr(buf)*LFNoise0.kr(6).range(0, 1), doneAction: 2)*EnvGen.kr(Env.perc(at, rl))).sum*amp}.play(s, out) };
 

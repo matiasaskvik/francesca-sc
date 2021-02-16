@@ -22,7 +22,7 @@
 ~funcs['a'][1] = {PZ_layer(~alarmclock).rhythm([3], 3, [3], 1)};
 
 //////// choosing the sample:
-~funcs['a'][2] = {PZ_layer(~bass, ~buffers['db'][4], 1).rhythm(4)};
+~funcs['a'][2] = {PZ_layer(~bass, ~buffers['dbs'][1.rrand(9)], 0.rrand(1)).rhythm([1])};
 
 // stop all
 ~funcs['a'].do{|f, i| ~funcs['a'][i] = ();}
@@ -111,7 +111,7 @@ Ndef.all.do{|n| n.stop(8);};
 //////// VOICE MESSAGES
 //////////////////////////////////
 //examples:
-~voicemsg.(~buffers['db'][2], 0, 1); // arguments are: audio buffer, channel, amplitude
+~voicemsg.(~buffers['dbs'][5], 0, 1); // arguments are: audio buffer, channel, amplitude
 ~voicemsg.(~buffers['sax'][2], 0, 1);
 
 // example with other wav (your path will be diffrent!):
