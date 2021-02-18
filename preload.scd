@@ -81,7 +81,11 @@ s.sync;
 s.sync;
 ~bass = {|buf, chan=0| {PlayBuf.ar(1, buf, 1, doneAction: 2)}.play(s, chan) };
 
-~bass_random = { {PlayBuf.ar(1, ~buffers['dbs'][(1..9).choose], 1, doneAction: 2)}.play(s, (0..9).choose) };
+~bass_random_dbs = { {PlayBuf.ar(1, ~buffers['dbs'][(1..9).choose], 1, doneAction: 2)}.play(s, (0..9).choose) };
+
+~bass_random_dbsl = { {PlayBuf.ar(1, ~buffers['dbsl'][(1..9).choose], 1, doneAction: 2)}.play(s, (0..9).choose) };
+
+~bass_random = { {PlayBuf.ar(1, ~buffers['db'][(1..8).choose], 1, doneAction: 2)}.play(s, (0..9).choose) };
 
 		~alarmclock = {|buf, out=0, at=0.01, rl=3, amp=1, rate=2| {(PlayBuf.ar(2, buf, rate,1, BufFrames.kr(buf)*LFNoise0.kr(6).range(0, 1), doneAction: 2)*EnvGen.kr(Env.perc(at, rl))).sum*amp}.play(s, out) };
 

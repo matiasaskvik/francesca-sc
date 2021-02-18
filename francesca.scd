@@ -9,8 +9,14 @@
 // DOUBLEBASS
 //////////////////////////////////
 
-// minimal version:
-~funcs['a'][0] = {PZ_layer(~bass_random).rhythm([2])};
+// minimal version dbs (dark bass tones):
+~funcs['a'][0] = {PZ_layer(~bass_random_dbs).rhythm([4])};
+
+// minimal version dbsl (bright bass tones):
+~funcs['a'][0] = {PZ_layer(~bass_random_dbsl).rhythm([4])};
+
+// minimal version (other):
+~funcs['a'][0] = {PZ_layer(~bass_random).rhythm([4])};
 
 // more rhythm (1 sample played each beat):
 ~funcs['a'][0] = {PZ_layer(~bass_random).rhythm(1,1, 1,1)};
