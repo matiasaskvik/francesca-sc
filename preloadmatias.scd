@@ -42,6 +42,8 @@ s.waitForBoot{
 		~buffers['voice_msg_start'] = Buffer.read(s, ~path_samples ++ "voice_message_start.wav");
 		~buffers['voice_msg_end'] = Buffer.read(s, ~path_samples ++ "voice_message_end.wav");
 );
+	t=TempoClock.default;
+	s.sync;
 
 // chord progressions:
 (
@@ -96,6 +98,10 @@ s.sync;
 ~bass_random_dbsl = { {PlayBuf.ar(1, ~buffers['dbsl'][(1..8).choose], 1, doneAction: 2)}.play(s, (0..8).choose) };
 
 ~bass_random = { {PlayBuf.ar(1, ~buffers['dbplukk'][(1..22).choose], 1, doneAction: 2)}.play(s, (0..9).choose) };
+
+~transposer = {|buf, amp=1, chan=0, transposition=1, time=1| {PitchShift.ar(PlayBuf.ar(1, buf, 1, doneAction: 2), [0.12,0.1], transposition, 0, 0.001).sum * amp* EnvGen.kr(Env.linen(sustainTime:time))}.play(s, chan) };
+
+~bass_random = { {PlayBuf.ar(1, ~buffers['db'][(1..8).choose], 1, doneAction: 2)}.play(s, (0..7).choose) };
 
 		~alarmclock = {|buf, out=0, at=0.01, rl=3, amp=1, rate=2| {(PlayBuf.ar(2, buf, rate,1, BufFrames.kr(buf)*LFNoise0.kr(6).range(0, 1), doneAction: 2)*EnvGen.kr(Env.perc(at, rl))).sum*amp}.play(s, out) };
 
